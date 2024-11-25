@@ -4,7 +4,6 @@ let
   macOS = builtins.currentSystem == "x86_64-darwin";
 
   linuxPackages = [
-    # Software
     pkgs.bitwarden
     pkgs.firefox
     pkgs.discord
@@ -16,7 +15,6 @@ let
     pkgs.redisinsight
     pkgs.vscode
     pkgs.godot
-    pkgs.libresprite
 
     # Utility packages
     pkgs.curl
@@ -31,7 +29,6 @@ let
     pkgs.ranger
     pkgs.tmux
     pkgs.zsh
-    pkgs.oh-my-zsh
     pkgs.nmap
     pkgs.wireshark
 
@@ -95,12 +92,12 @@ in
     xkbVariant = "intl";
   };
 
-  # Clone dotfiles in the .config folder
+  # Clone dotfiles into .configs
   home.file."config".text = ''
     git clone ${dotfilesRepo} ${homeDirectory}/.config
   '';
 
-  # Clone Neovim configuration
+  # Clone NeoVim configuration
   home.file."nvim".text = ''
     git clone https://github.com/NvChad/NvChad ${homeDirectory}/.config/nvim --depth 1
   '';

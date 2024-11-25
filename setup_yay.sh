@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Update package manager
+# Update and upgrade system packages
 echo "Updating package database..."
 yay -Syu --noconfirm
 
-# Install necessary packages via Yay
+# Install packages via Yay if not installed
 yay_packages=(
     bitwarden
     firefox
@@ -15,9 +15,9 @@ yay_packages=(
     httpie
     kitty
     redisinsight
-    code           
+    code
     godot
-    
+
     curl
     fortune
     fzf
@@ -34,18 +34,16 @@ yay_packages=(
     python
     python-pip
     pipx
-    poetry
-    rust
     gcc
     gdb
     make
     ninja
     go
+    sqlite
     docker
+    docker-compose
     kubectl
     helm
-    sqlite
-    redis
 )
 
 for pkg in "${yay_packages[@]}"; do
@@ -57,8 +55,24 @@ for pkg in "${yay_packages[@]}"; do
     fi
 done
 
+# Install Poetry via pipx if not installed
+if ! command -v poetry &>/dev/null; then
+    echo "Installing Poetry with pipx..."
+    pipx install poetry
+    pipx ensurepath
+else
+    echo "Poetry is already installed, skipping."
+fi
 
-# Setup Oh My Zsh
+# Install Rust via rustup if not installed
+if ! command -v rustup &>/dev/null; then
+    echo "Installing Rust via rustup..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+else
+    echo "Rust is already installed, skipping."
+fi
+
+# Install Oh My Zsh if not installed
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "Setting up Oh My Zsh..."
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -66,7 +80,7 @@ else
     echo "Oh My Zsh is already installed, skipping."
 fi
 
-# Clone dotfiles
+# Clone dotfiles and sync them
 if [ -d "$HOME/.config" ]; then
     echo "~/.config exists. Adding dotfiles contents into it..."
     git clone https://github.com/vylis/dotfiles "$HOME/.config/dotfiles" || { echo "Failed to clone dotfiles repo"; exit 1; }
@@ -78,7 +92,7 @@ else
     git clone https://github.com/vylis/dotfiles ~/.config || { echo "Failed to clone dotfiles repo"; exit 1; }
 fi
 
-# Clone NeoVim config
+# Clone NeoVim config if not installed
 if [ ! -d "$HOME/.config/nvim" ]; then
     echo "Cloning Neovim configuration..."
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
@@ -87,7 +101,7 @@ else
 fi
 
 # Source the updated ~/.zshrc
-# zsh -c "source ~/.zshrc"
+echo "Sourcing ~/.zshrc..."
 source ~/.zshrc
 
 echo "Setup complete!"
