@@ -1,0 +1,107 @@
+{ pkgs ? import <nixpkgs> {} }:
+
+let
+  macOS = builtins.currentSystem == "x86_64-darwin";
+
+  linuxPackages = [
+    # Software
+    pkgs.bitwarden
+    pkgs.firefox
+    pkgs.discord
+    pkgs.google-chrome
+    pkgs.spotify
+    pkgs.dbeaver
+    pkgs.httpie-desktop
+    pkgs.kitty
+    pkgs.redisinsight
+    pkgs.vscode
+    pkgs.godot
+    pkgs.libresprite
+
+    # Utility packages
+    pkgs.curl
+    pkgs.fortune
+    pkgs.fzf
+    pkgs.git
+    pkgs.htop
+    pkgs.httpie
+    pkgs.neofetch
+    pkgs.neovim
+    pkgs.pokemonsay
+    pkgs.ranger
+    pkgs.tmux
+    pkgs.zsh
+    pkgs.oh-my-zsh
+    pkgs.nmap
+    pkgs.wireshark
+
+    # Programming languages and tools
+    pkgs.nodejs
+    pkgs.python3
+    pkgs.python312Packages.pip
+    pkgs.pipx
+    pkgs.poetry
+    pkgs.rustc
+    pkgs.cargo
+    pkgs.rust-analyzer
+    pkgs.gcc
+    pkgs.gdb
+    pkgs.make
+    pkgs.clang
+    pkgs.clang-tools
+    pkgs.ninja
+    pkgs.go
+    pkgs.docker
+    pkgs.kubectl
+    pkgs.helm
+    pkgs.sqlite
+    pkgs.redis
+    pkgs.mysql
+    pkgs.postgresql
+  ];
+
+  macOSPackages = [
+    pkgs.brew
+    pkgs.xcode
+    pkgs.yabai
+    pkgs.skhd
+    pkgs.spacebar
+  ];
+
+  dotfilesRepo = "https://github.com/vylis/dotfiles";
+  homeDirectory = builtins.getEnv "HOME"; 
+
+in
+{
+  environment.systemPackages = if macOS then macOSPackages ++ linuxPackages else linuxPackages;
+
+  programs.zsh.enable = true;
+  programs.zsh.ohMyZsh.enable = true;
+
+  # Language, timezone, and keyboard settings
+  i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "Europe/Paris";
+  
+  services.xserver.inputMethod = {
+    enabled = "fcitx";
+    defaultIM = "fcitx";
+    engines = [ "fcitx-keyboard-us" ];
+  };
+
+  # X11 keyboard layout
+  services.xserver = {
+    enable = true;
+    layout = "us";
+    xkbVariant = "intl";
+  };
+
+  # Clone dotfiles in the .config folder
+  home.file."config".text = ''
+    git clone ${dotfilesRepo} ${homeDirectory}/.config
+  '';
+
+  # Clone Neovim configuration
+  home.file."nvim".text = ''
+    git clone https://github.com/NvChad/NvChad ${homeDirectory}/.config/nvim --depth 1
+  '';
+}
