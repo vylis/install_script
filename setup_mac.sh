@@ -50,16 +50,16 @@ brew_packages=(
     node
     python@3.13
     pipx
-    poetry
-    rust
     gcc
     gdb
     make
     ninja
     go
-    docker
     sqlite
-    redis
+    kubectl
+    helm
+    docker
+    docker-compose
 )
 
 for pkg in "${brew_packages[@]}"; do
@@ -68,8 +68,20 @@ for pkg in "${brew_packages[@]}"; do
         brew install "$pkg" || { echo "Failed to install $pkg"; continue; }
     else
         echo "$pkg is already installed, skipping."
-    # fi
+    fi
 done
+
+# Install Poetry with pipx
+pipx install poetry
+pipx ensurepath
+
+# Install Rust using rustup 
+if ! command -v rustup &>/dev/null; then
+    echo "Installing Rust via rustup..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+else
+    echo "Rust is already installed, skipping."
+fi
 
 # Setup Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then

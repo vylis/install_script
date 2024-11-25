@@ -6,18 +6,10 @@ sudo apt update && sudo apt upgrade -y
 
 # Install packages via APT
 apt_packages=(
-    # bitwarden
     firefox
-    # discord
-    # google-chrome
-    # spotify
-    # dbeaver
     httpie
     kitty
-    # redisinsight
-    # code           
-    # godot
-    
+
     curl
     fortune
     fzf
@@ -31,22 +23,17 @@ apt_packages=(
     nmap
     wireshark
     nodejs
+    npm
     python3
-    python3-pip
     pipx
-    poetry
-    rustc
-    cargo
     gcc
     gdb
     make
     ninja
     go
-    docker
+    sqlite3     
     kubectl
-    helm
-    sqlite3        
-    redis
+    helm   
 )
 
 for pkg in "${apt_packages[@]}"; do
@@ -72,9 +59,8 @@ snap_packages=(
     discord
     google-chrome
     spotify
-    dbeaver
+    dbeaver-ce
     redisinsight
-    code
     godot
 )
 
@@ -86,6 +72,56 @@ for snap_pkg in "${snap_packages[@]}"; do
         echo "$snap_pkg is already installed via Snap, skipping."
     fi
 done
+
+# Install Poetry with pipx
+pipx install poetry
+pipx ensurepath
+
+# Install Rust using rustup (not via APT)
+if ! command -v rustup &>/dev/null; then
+    echo "Installing Rust via rustup..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+else
+    echo "Rust is already installed, skipping."
+fi
+
+# Install VSCode if it's not already installed
+if ! command -v code &>/dev/null; then
+    echo "Installing VSCode..."
+    sudo apt-get install wget gpg
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+    echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+    rm -f packages.microsoft.gpg
+    sudo apt install apt-transport-https
+    sudo apt update
+    sudo apt install code # or code-insiders
+else
+    echo "VSCode is already installed, skipping."
+fi
+
+# Install Docker if it's not already installed
+if ! command -v docker &>/dev/null; then
+    echo "Installing Docker..."
+    for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+    sudo chmod 666 /var/run/docker.sock
+else
+    echo "Docker is already installed, skipping."
+fi
 
 # Setup Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
