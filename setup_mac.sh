@@ -133,6 +133,9 @@ fi
 echo "Sourcing ~/.zshrc..."
 source ~/.zshrc
 
+# Create empty hush login
+touch ~/.hushlogin
+
 # Start yabai, skhd, and spacebar services
 echo "Starting yabai, skhd, and spacebar services..."
 yabai --start-service || { echo "Failed to start yabai"; }
