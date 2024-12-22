@@ -39,11 +39,13 @@ brew_packages=(
     godot
 
     fortune
+    cowsay
     fzf
     git
     htop
     neofetch
     neovim
+    emacs
     ranger
     tmux
     zsh
@@ -118,6 +120,18 @@ else
     echo "Neovim configuration already exists, skipping."
 fi
 
+# Clone Doom Emacs if not installed
+if [ ! -d "$HOME/.config/emacs" ]; then
+    echo "Cloning Doom Emacs..."
+    git clone https://github.com/doomemacs/doomemacs ~/.config/emacs --depth 1
+
+    # Install Doom Emacs
+    echo "Installing Doom Emacs..."
+    ~/.config/emacs/bin/doom install
+else
+    echo "Doom Emacs is already installed, skipping."
+fi
+
 # Create symlinks for Python and pip if not present
 if [ ! -L /usr/local/bin/python ]; then
     echo "Creating symlink for python..."
@@ -128,6 +142,9 @@ if [ ! -L /usr/local/bin/pip ]; then
     echo "Creating symlink for pip..."
     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
 fi
+
+# Append "fortune | cowsay" to the end of ~/.zshrc 
+echo 'fortune | cowsay' >> ~/.zshrc
 
 # Source the updated ~/.zshrc
 echo "Sourcing ~/.zshrc..."
