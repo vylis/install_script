@@ -163,9 +163,9 @@ fi
 # Install Minikube if not installed
 if ! command -v minikube &>/dev/null; then
     echo "Installing Minikube..."
-    curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64/
-    sudo install minikube-linux-amd64 /usr/local/bin/minikube
-    rm minikube-linux-amd64
+    curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube_latest_amd64.deb
+    sudo dpkg -i minikube_latest_amd64.deb
+    rm -rf ./minikube_latest_amd64.deb
 else
     echo "Minikube is already installed, skipping."
 fi
