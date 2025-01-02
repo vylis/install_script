@@ -183,11 +183,21 @@ else
     echo "Doom Emacs is already installed, skipping."
 fi
 
-# Append /snap/bin path to the end of ~/.zshrc 
-echo 'export PATH=$PATH:/snap/bin' >> ~/.zshrc 
+# Check if /snap/bin is already in ~/.zshrc
+if ! grep -q '/snap/bin' ~/.zshrc; then
+    echo 'export PATH=$PATH:/snap/bin' >> ~/.zshrc
+    echo "Added /snap/bin to PATH in ~/.zshrc"
+else
+    echo "/snap/bin is already in PATH in ~/.zshrc"
+fi
 
-# Append "fortune | cowsay" to the end of ~/.zshrc 
-echo 'fortune | cowsay' >> ~/.zshrc
+# Check if "fortune | cowsay" is already in ~/.zshrc
+if ! grep -q 'fortune | cowsay' ~/.zshrc; then
+    echo 'fortune | cowsay' >> ~/.zshrc
+    echo "Added 'fortune | cowsay' to ~/.zshrc"
+else
+    echo "'fortune | cowsay' is already in ~/.zshrc"
+fi
 
 # Source the updated ~/.zshrc
 echo "Sourcing ~/.zshrc..."

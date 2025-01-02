@@ -114,8 +114,13 @@ else
     echo "Doom Emacs is already installed, skipping."
 fi
 
-# Append "fortune | cowsay" to the end of ~/.zshrc 
-echo 'fortune | cowsay' >> ~/.zshrc
+# Check if "fortune | cowsay" is already in ~/.zshrc
+if ! grep -q 'fortune | cowsay' ~/.zshrc; then
+    echo 'fortune | cowsay' >> ~/.zshrc
+    echo "Added 'fortune | cowsay' to ~/.zshrc"
+else
+    echo "'fortune | cowsay' is already in ~/.zshrc"
+fi
 
 # Source the updated ~/.zshrc
 echo "Sourcing ~/.zshrc..."
