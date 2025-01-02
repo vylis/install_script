@@ -74,10 +74,6 @@ done
 # Install packages --classic via Snap if not installed
 snap_packages_classic=(
     godot
-
-    kubectl
-    helm
-    minikube
 )
 
 for snap_pkg in "${snap_packages_classic[@]}"; do
@@ -141,6 +137,39 @@ if ! command -v docker &>/dev/null; then
     sudo chmod 666 /var/run/docker.sock
 else
     echo "Docker is already installed, skipping."
+fi
+
+# Install kubectl if not installed
+if ! command -v kubectl &>/dev/null; then
+    echo "Installing kubectl..."
+    sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-get install -y kubectl
+else
+    echo "kubectl is already installed, skipping."
+fi
+
+# Install Helm if not installed
+if ! command -v helm &>/dev/null; then
+    echo "Installing Helm..."
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod +x get_helm.sh
+    sudo ./get_helm.sh
+    rm -rf ./get_helm.sh
+else
+    echo "Helm is already installed, skipping."
+fi
+
+# Install Minikube if not installed
+if ! command -v minikube &>/dev/null; then
+    echo "Installing Minikube..."
+    curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64/
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube
+    rm minikube-linux-amd64
+else
+    echo "Minikube is already installed, skipping."
 fi
 
 # Install Oh My Zsh if not installed
