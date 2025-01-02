@@ -44,17 +44,9 @@ let
     pkgs.gcc
     pkgs.gdb
     pkgs.make
-    pkgs.clang
-    pkgs.clang-tools
-    pkgs.ninja
     pkgs.go
-    pkgs.docker
-    pkgs.kubectl
-    pkgs.helm
     pkgs.sqlite
-    pkgs.redis
-    pkgs.mysql
-    pkgs.postgresql
+    pkgs.docker
   ];
 
   macOSPackages = [
@@ -101,4 +93,35 @@ in
   home.file."nvim".text = ''
     git clone https://github.com/NvChad/NvChad ${homeDirectory}/.config/nvim --depth 1
   '';
+
+  # Clone Doom Emacs configuration
+  home.file."emacs".text = ''
+    git clone https://github.com/doomemacs/doomemacs ${homeDirectory}/.config/emacs --depth 1
+  '';
+
+  # Create symlinks for Python and pip
+  home.file."python-symlink".text = ''
+    ln -s /usr/local/bin/python3.13 /usr/local/bin/python
+    ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+  '';
+
+  # Set up services like yabai, skhd, and spacebar
+  systemd.user.services.yabai = {
+    description = "Yabai service";
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.yabai}/bin/yabai --start-service";
+  };
+
+  systemd.user.services.skhd = {
+    description = "Skhd service";
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.skhd}/bin/skhd --start-service";
+  };
+
+  systemd.user.services.spacebar = {
+    description = "Spacebar service";
+    wantedBy = [ "default.target" ];
+    serviceConfig.ExecStart = "${pkgs.spacebar}/bin/spacebar";
+  };
+
 }

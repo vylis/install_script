@@ -34,7 +34,7 @@ brew_packages=(
     dbeaver-community
     httpie
     kitty
-    redisinsight
+    redis-insight
     visual-studio-code
     godot
 
@@ -57,11 +57,8 @@ brew_packages=(
     gcc
     gdb
     make
-    ninja
     go
     sqlite
-    kubectl
-    helm
     docker
     docker-compose
 )

@@ -39,13 +39,10 @@ yay_packages=(
     gcc
     gdb
     make
-    ninja
     go
     sqlite
     docker
     docker-compose
-    kubectl
-    helm
 )
 
 for pkg in "${yay_packages[@]}"; do

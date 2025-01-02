@@ -31,11 +31,8 @@ apt_packages=(
     gcc
     gdb
     make
-    ninja
     go
     sqlite3
-    kubectl
-    helm
 )
 
 for pkg in "${apt_packages[@]}"; do
@@ -59,17 +56,30 @@ fi
 snap_packages=(
     bitwarden
     discord
-    google-chrome
+    chromium
     spotify
     dbeaver-ce
     redisinsight
-    godot
 )
 
 for snap_pkg in "${snap_packages[@]}"; do
     if ! snap list | grep -qw "$snap_pkg"; then
         echo "Installing Snap package $snap_pkg..."
         sudo snap install "$snap_pkg" || { echo "Failed to install Snap package $snap_pkg"; continue; }
+    else
+        echo "$snap_pkg is already installed via Snap, skipping."
+    fi
+done
+
+# Install packages --classic via Snap if not installed
+snap_packages_classic=(
+    godot --classic
+)
+
+for snap_pkg in "${snap_packages_classic[@]}"; do
+    if ! snap list | grep -qw "$snap_pkg"; then
+        echo "Installing Snap package $snap_pkg..."
+        sudo snap install "$snap_pkg" --classic || { echo "Failed to install Snap package $snap_pkg"; continue; }
     else
         echo "$snap_pkg is already installed via Snap, skipping."
     fi
@@ -124,7 +134,6 @@ if ! command -v docker &>/dev/null; then
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     sudo groupadd docker
     sudo usermod -aG docker $USER
-    newgrp docker
     sudo chmod 666 /var/run/docker.sock
 else
     echo "Docker is already installed, skipping."

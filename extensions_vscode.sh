@@ -22,7 +22,7 @@ extensions=(
     "ms-vscode.cmake-tools"
     "xaver.clang-format"
     "redis.redis-for-vscode"
-    "illixion.vscode-vibrancy-continued"
+    # "illixion.vscode-vibrancy-continued"
     "jdinhlife.gruvbox"
 )
 
