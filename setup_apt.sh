@@ -142,11 +142,9 @@ fi
 # Install kubectl if not installed
 if ! command -v kubectl &>/dev/null; then
     echo "Installing kubectl..."
-    sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates
-    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-    echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-    sudo apt-get update
-    sudo apt-get install -y kubectl
+    curl -LO https://dl.k8s.io/release/$(curl -Ls https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+    chmod +x ./kubectl
+    sudo mv ./kubectl /usr/local/bin/kubectl
 else
     echo "kubectl is already installed, skipping."
 fi
