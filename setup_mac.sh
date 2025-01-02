@@ -61,6 +61,9 @@ brew_packages=(
     sqlite
     docker
     docker-compose
+    kubectl
+    helm
+    minikube
 )
 
 for pkg in "${brew_packages[@]}"; do

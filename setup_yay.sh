@@ -43,6 +43,9 @@ yay_packages=(
     sqlite
     docker
     docker-compose
+    kubectl
+    helm
+    minikube
 )
 
 for pkg in "${yay_packages[@]}"; do

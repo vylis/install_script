@@ -73,7 +73,11 @@ done
 
 # Install packages --classic via Snap if not installed
 snap_packages_classic=(
-    godot --classic
+    godot
+
+    kubectl
+    helm
+    minikube
 )
 
 for snap_pkg in "${snap_packages_classic[@]}"; do
@@ -178,6 +182,9 @@ if [ ! -d "$HOME/.config/emacs" ]; then
 else
     echo "Doom Emacs is already installed, skipping."
 fi
+
+# Append /snap/bin path to the end of ~/.zshrc 
+echo 'export PATH=$PATH:/snap/bin' >> ~/.zshrc 
 
 # Append "fortune | cowsay" to the end of ~/.zshrc 
 echo 'fortune | cowsay' >> ~/.zshrc
