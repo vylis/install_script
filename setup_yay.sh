@@ -18,7 +18,7 @@ yay_packages=(
     godot
 
     curl
-    fortune
+    fortune-mod
     cowsay
     fzf
     git
