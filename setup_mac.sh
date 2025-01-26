@@ -34,7 +34,6 @@ brew_packages=(
     dbeaver-community
     httpie
     kitty
-    redis-insight
     visual-studio-code
     godot
 
@@ -61,6 +60,7 @@ brew_packages=(
     sqlite
     docker
     docker-compose
+    colima
     kubectl
     helm
     minikube
@@ -163,5 +163,6 @@ echo "Starting yabai, skhd, and spacebar services..."
 yabai --start-service || { echo "Failed to start yabai"; }
 skhd --start-service || { echo "Failed to start skhd"; }
 brew services start spacebar || { echo "Failed to start spacebar service"; }
+colima start
 
 echo "Setup complete!"

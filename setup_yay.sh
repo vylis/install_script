@@ -14,7 +14,6 @@ yay_packages=(
     dbeaver
     httpie
     kitty
-    redisinsight
     code
     godot
 

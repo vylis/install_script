@@ -59,7 +59,6 @@ snap_packages=(
     chromium
     spotify
     dbeaver-ce
-    redisinsight
 )
 
 for snap_pkg in "${snap_packages[@]}"; do
