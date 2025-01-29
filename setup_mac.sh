@@ -92,14 +92,6 @@ else
     echo "Rust is already installed, skipping."
 fi
 
-# Setup Oh My Zsh if not installed
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    echo "Setting up Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-    echo "Oh My Zsh is already installed, skipping."
-fi
-
 # Clone dotfiles and sync them
 if [ -d "$HOME/.config" ]; then
     echo "~/.config exists. Adding dotfiles contents into it..."
@@ -143,6 +135,14 @@ if [ ! -L /usr/local/bin/pip ]; then
     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
 fi
 
+# Setup Oh My Zsh if not installed
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Setting up Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+    echo "Oh My Zsh is already installed, skipping."
+fi
+
 # Check if "fortune | cowsay" is already in ~/.zshrc
 if ! grep -q 'fortune | cowsay' ~/.zshrc; then
     echo 'fortune | cowsay' >> ~/.zshrc
@@ -150,6 +150,9 @@ if ! grep -q 'fortune | cowsay' ~/.zshrc; then
 else
     echo "'fortune | cowsay' is already in ~/.zshrc"
 fi
+
+# Set zsh as default shell
+chsh -s $(which zsh)
 
 # Source the updated ~/.zshrc
 echo "Sourcing ~/.zshrc..."
